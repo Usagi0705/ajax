@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewData["Title"] = "City";
+}
+
+<h1>City</h1>
+<select id="selectCity"></select>
+<span id="span1"></span>
+
+
+@section Scripts{
+    <script>
+        const cities = ["台北市", "新北市", "桃園市", "台中市", "台南市", "高雄市"]
+        const selCity = document.querySelector('#selectCity')
+        const span1 = document.querySelector('#span1')
+
+        cities.forEach(city => {
+            const option = document.createElement('option');
+            option.value = city;
+            option.textContent = city;
+            selCity.appendChild(option);
+            show()
+        })
+
+        selCity.addEventListener('change', show)
+      
+
+        function show() {
+            span1.textContent = selCity.value;       
+        }   
+    
+    </script>
+}

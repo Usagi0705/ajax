@@ -1,0 +1,89 @@
+﻿
+@{
+    ViewData["Title"] = "jQuery";
+}
+
+<h1>jQuery</h1>
+<button id="buttonGet" class="btn btn-primary">get</button>
+<button id="buttonPost" class="btn btn-secondary">post</button>
+<button id="buttonJson" class="btn btn-success">getJson</button>
+<button id="buttonLoad" class="btn btn-info">load</button>
+<button id="buttonAjax" class="btn btn-warning">ajax</button>
+<button id="buttonCors" class="btn btn-danger">cors</button>
+<div class="alert alert-dark mt-3 w-50" role="alert" id="divAlert">
+    <span></span>
+    <ul>
+
+    </ul>
+</div>
+@section Scripts{
+    <script>
+        $('#buttonGet').click(function () {
+            $.get('@Url.Content("~/api/getdemo")',{"name":"Tom","age":30},function(data){
+                //data 就會收到伺服器端回傳的結果
+                $('#divAlert>span').text(data)
+            })
+        })
+
+        $('#buttonPost').click(function () {
+            $.post('@Url.Content("~/api/getdemo")', { "name": "Mary", "age": 28 }, function (data) {
+                //data 就會收到伺服器端回傳的結果
+                $('#divAlert>span').text(data)
+            })
+        })
+
+        $('#buttonJson').click(function () {
+            $.getJSON('@Url.Content("~/api/Cities")', function (datas) {
+                //data 就會收到伺服器端回傳的結果
+                //$('#divAlert').text(datas)    //使用jQuery的getJSON方法會自動轉型
+
+                const theUI = $('#divAlert>ul');
+                const docFrag = $(document.createDocumentFragment()) //建立一個空元素(容器)
+                $.each(datas,function(idx,city){   //兩個參數 idx是索引值 city是後面的資料
+                    //console.log(city)
+                    const item = $('<li></li>').text(city)  //jQuery的寫法
+                    docFrag.append(item)
+                    })
+                theUI.html(docFrag);
+                })            
+            //迴圈內不要使用選擇器
+            //迴圈內不要直接使用append加到網頁,應該先用容器接收,迴圈外再從容器中取出,增加效能(避免網頁重複渲染)
+        })
+
+
+        //$('#buttonLoad').click(function () {
+        //    $('#divAlert').load('@Url.Content("~/home/Partial1")')
+        //})
+
+        $('#buttonLoad').click(function () {
+            $('#divAlert').load('@Url.Content("~/home/Partial2")')
+        })  @*從Action傳資料給PartialView，只能透過Ajax來使用*@
+
+        $('#buttonAjax').click(function () {
+                $.ajax({
+                    'url':'@Url.Content("~/api/Cities")',
+                    'type':'get',
+                    'dataType':'json'
+                })
+                .done(function(data){
+                    const theUI = $('#divAlert>ul');
+                    const docFrag = $(document.createDocumentFragment()) //建立一個空元素(容器)
+                    $.each(data, function (idx, city) {
+                        const item = $('<li></li>').text(city)
+                        docFrag.append(item)
+                    })
+                    theUI.html(docFrag)
+                    //  $('#divAlert').text(data)
+                })              
+        })
+
+        $('#buttonCors').click(function () {
+            //$('#divAlert').text("CORs")
+            //const url = "https://localhost:7047/api/Shippers"
+            $.getJSON('https://localhost:7047/api/Shippers',function(datas){
+                console.log(datas);
+            })
+        })
+
+    </script>
+}

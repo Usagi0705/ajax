@@ -1,0 +1,80 @@
+﻿
+@{
+    ViewData["Title"] = "Fetch";
+}
+
+<h1>Fetch</h1>
+<h2 id="myH"></h2>
+<img id="img1" class="w-25" />
+
+<ul id="ul1">
+</ul>
+
+@section Scripts{
+    <script>
+
+        fetch('@Url.Content("/api/index")')
+            .then(response => {
+                console.log(response)
+                //     console.log(response.ok)
+                //   return response.text()  //這裡也會得到一個promise物件
+            })
+        //.then(data => {
+        //    console.log(data)
+        //})
+
+
+
+        console.log(fetch('@Url.Content("/api/index")'));
+
+        fetch('@Url.Content("/api/index")')                @*Fetch的底層就是Promise語法*@
+            .then(response => {
+                console.log(response)
+                console.log(response.ok)
+            })
+
+        fetch('@Url.Content("/api/index")')       
+            //.then(response => {
+            //    console.log(response)
+            //    console.log(response.ok)
+            //})
+
+            .then(response => response.text())      //得到的都是Promise物件
+            .then(data => {
+                document.querySelector('#myH').innerHTML = data;
+            })
+
+        //fetch('@Url.Content("/api/Cities")')
+        //    .then(response => response.json())
+        //    .then(datas => {
+        //        const lis = datas.map(city => `<li>${city}</li>`)
+        //        document.querySelector('#ul1').innerHTML = lis.join("")
+        //    })
+
+        //fetch('@Url.Content("/api/GetImageByte/2")')
+        //    .then(response => response.blob())            //接受二進位資料並轉為圖片顯示在網站上
+        //    .then(datas => {
+        //        const myImg = document.querySelector('#img1');
+        //        myImg.src = URL.createObjectURL(datas);
+        //    })
+
+        async function loadJSON() {
+            const response = await fetch('@Url.Content("/api/Cities")')
+            const datas = await response.json();
+            const lis = datas.map(city => `<li>${city}</li>`)
+            document.querySelector('#ul1').innerHTML = lis.join("")
+        }
+
+        async function loadImage() {
+            const response = await fetch('@Url.Content("/api/GetImageByte/2")')
+            const datas = await response.blob()
+            const myImg = document.querySelector('#img1');
+            myImg.src = URL.createObjectURL(datas);
+        }
+
+        loadJSON();
+        loadImage();
+
+    </script>
+}
+      

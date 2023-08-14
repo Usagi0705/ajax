@@ -1,0 +1,99 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    @Html.Partial("Partial1")
+    @Html.Partial("Partial2")  @*不會經過Action,所以不會顯示東西*@
+</div>
+
+
+
+<table id="empTable" class="table table-bordered table-hover table-striped">
+    <thead>
+        <tr>
+            <th>姓名</th>
+            <th>年資</th>
+            <th>薪水</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+@section Styles{
+    <style>
+        p{
+            background-color:pink
+        }
+    </style>
+}
+
+@section Scripts{
+    <script>
+        
+        $('.display-4').on('mouseover',function(){
+            $(this).css('color','blue')
+        }).on('mouseout',function(){
+            $(this).css('color', 'black')
+        })
+
+        //const emps = [{ "name": "Tom", "workYears": 3, "salary": 35000 },
+                      //{ "name": "Jack", "workYears": 5, "salary": 40000 },
+                      //{ "name": "Mary", "workYears": 7, "salary": 45000 }];
+        //emps => array
+
+        //叫出陣列中的第1個
+        //console.log(emps[1]); // { "name": "Jack", "workYears": 5, "salary": 40000 }
+        //emps[1] => object
+
+        //叫出陣列第一個workYear屬性
+        //console.log(emps[1].workYears); //5
+
+        //全部叫出來
+        //for(let i=0,max=emps.length;i<max;i++){
+        //    console.log(emps[i].name)
+        //    console.log(emps[i].workYears)
+        //    console.log(emps[i].salary)
+        //}
+
+        const emp = {
+            "employees": [
+                { "name": "Tom", "workYears": 3, "salary": 35000 },
+                { "name": "Jack", "workYears": 5, "salary": 40000 },
+                { "name": "Mary", "workYears": 7, "salary": 45000 }
+            ]
+        };
+
+        //for (let i = 0, max = emps.length; i < max; i++) {
+        //    console.log(emps[i].name)
+        //    console.log(emps[i].workYears)
+        //    console.log(emps[i].salary)
+        //}
+
+        //emp.employees.forEach(employee => {
+        //    console.log("Name:", employee.name);
+        //    console.log("Work Years:", employee.workYears);
+        //    console.log("Salary:", employee.salary);
+        //    console.log("--------------------");
+        //});
+
+                                        //箭頭函式取代function(){}
+        const datas = emp.employees.map(employee => {
+            //employee = { "name": "Tom", "workYears": 3, "salary": 35000 }
+            const { name, workYears, salary } = employee
+            return (
+                ` <tr>
+                       <td>${name}</td>
+                       <td>${workYears}</td>
+                       <td>${salary}</td>
+                  </tr>
+                `
+            )
+        })
+            document.querySelector('#empTable>tbody').innerHTML = datas.join("")      
+    </script>
+}
+

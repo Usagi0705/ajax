@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewData["Title"] = "GetDemo";
+}
+
+<h1>GetDemo</h1>
+
+<div class="alert alert-info" id="div1"></div>
+
+@section Scripts{
+    <script>
+        //步驟一 建立Ajax物件
+        const xhr = new XMLHttpRequest();
+
+        //步驟二 對伺服器發出請求
+        //xhr.open('GET','/api/index');
+        //xhr.open('GET', '/api/getdemo');
+
+        //xhr.open('GET', '/api/getdemo?name=Mary&age=28')
+        const name = "Jack";
+        const age = 25;
+
+        //有傳參數使用下列兩種寫法 ?後面不要寫在Url.Content裡面
+        //xhr.open('GET', '@Url.Content("/api/getdemo")?name=Mary&age=28')
+        xhr.open('GET', `@Url.Content("/api/getdemo")?name=${name}&age=${age}`)
+        
+   
+        xhr.send();
+
+        //步驟三 在load事件中接收伺服器回傳的結果
+        xhr.addEventListener('load',() =>{
+            const data = xhr.responseText;
+            //console.log(data)
+        //步驟四 讀出回傳的結果(XML or JSON)
+
+        //步驟五 將讀出的結果顯示在網頁上
+            document.querySelector('#div1').innerHTML = `<h3>${data}</h3>`
+        })
+    </script>
+}
